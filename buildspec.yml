@@ -17,8 +17,7 @@ phases:
           cd ${function}
 
           if [ -f "index.js" ]; then
-            aws lambda get-function --function-name=${function%/} > /dev/null 2>&1
-            if [ 0 -eq $? ]; then
+            aws lambda get-function --function-name=${function%/} > /dev/null 2>&1  && \
               echo "Lambda '$1' exists"
               echo "Compiling code to single file for ${function%/} lambda function..."
               npx ncc build index.js
@@ -29,10 +28,8 @@ phases:
               echo "Deploying Lambda"
               aws lambda update-function-code --function-name=${function%/} --zip-file=fileb://deploy.zip
 
-              echo "Deployed ${function%/}"
-            else
+              echo "Deployed ${function%/}" || \
               echo "Lambda ${function%/} DOES NOT exist"
-            fi
           fi
 
           cd ..
