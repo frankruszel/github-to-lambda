@@ -18,7 +18,8 @@ phases:
             return 1
           fi
         }
-      - echo (does_lambda_exist github-to-lambda)
+      - test = (does_lambda_exist github-to-lambda)
+      - echo $test
   build:
     commands:
       - echo "Looking for all lambda functions..."
