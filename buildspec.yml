@@ -13,20 +13,20 @@ phases:
         cd lambdas
         pwd
         for function in */ ; do
-          echo ${function}
+          echo ${function%/}
           cd ${function}
 
           if [ -f "index.js" ]; then
-            echo "Compiling code to single file for ${function} lambda function..."
+            echo "Compiling code to single file for ${function%/} lambda function..."
             npx ncc build index.js
 
-            echo "Zipping ${function} handler code..."
+            echo "Zipping ${function%/} handler code..."
             zip -j deploy.zip ./dist/*
 
             echo "Deploying Lambda"
-            aws lambda update-function-code --function-name=${function} --zip-file=fileb://deploy.zip
+            aws lambda update-function-code --function-name=${function%/} --zip-file=fileb://deploy.zip
 
-            echo "Deployed ${function}"
+            echo "Deployed ${function%/}"
           fi
 
           cd ..
