@@ -17,7 +17,7 @@ phases:
           cd ${function}
 
           if [ -f "index.js" ]; then
-            aws lambda function-exists --function-name=${function%/} > /dev/null 2>&1
+            aws lambda list-functions  --query 'Functions[*].[FunctionName]' > /dev/null 2>&1
             status=$?
             echo $status
             if [ $status -eq 0 ]; then
