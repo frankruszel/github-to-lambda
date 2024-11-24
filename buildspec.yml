@@ -18,7 +18,8 @@ phases:
 
           if [ -f "index.js" ]; then
             aws lambda get-function --function-name="${function%/}" > /dev/null 2>&1
-            if [ $? -eq 0 ]; then
+            status=$?
+            if [ $status -eq 0 ]; then
               echo "Lambda '$1' exists"
               echo "Compiling code to single file for ${function%/} lambda function..."
               npx ncc build index.js
