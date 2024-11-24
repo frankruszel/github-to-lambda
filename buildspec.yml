@@ -6,17 +6,6 @@ phases:
     commands:
       - echo "Installing dependencies..."
       - npm ci
-      - echo "setting up functions..."
-      - | 
-        does_lambda_exist() {
-          aws lambda get-function --function-name "$1" > /dev/null 2>&1
-          if [ 0 -eq $? ]; then
-            echo "Lambda exists"
-          else
-            echo "Lambda does not exist"
-          fi
-        }
-      - does_lambda_exist "github-to-lambda"
   build:
     commands:
       - echo "Looking for all lambda functions..."
@@ -28,8 +17,9 @@ phases:
           cd ${function}
 
           if [ -f "index.js" ]; then
-            exists=$(does_lambda_exist my_lambda_fn_name) 
-            if [ $exists -eq 0 ]; then
+            aws lambda get-function --function-name=${function%/} > /dev/null 2>&1
+            if [ 0 -eq $? ]; then
+              echo "Lambda '$1' exists"
               echo "Compiling code to single file for ${function%/} lambda function..."
               npx ncc build index.js
 
@@ -43,7 +33,6 @@ phases:
             else
               echo "Lambda ${function%/} DOES NOT exist"
             fi
-            
           fi
 
           cd ..
