@@ -1,0 +1,19 @@
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+      nodejs: 22.x
+    commands:
+      - echo "Installing dependencies..."
+      - npm ci
+  build:
+    commands:
+      - echo "Compiling code into a single file..."
+      - npx ncc build index.js
+      - echo "Zipping handler code..."
+      - zip -j deploy.zip ./dist/*
+  post_build:
+    commands:
+      - echo "Updating Lambda Function..."
+      - aws lambda update-function-code --function-name github-to-lambda --zip-file fileb://deploy.zip
+      - echo "DONE!!"
