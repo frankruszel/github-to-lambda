@@ -1,7 +1,7 @@
 import * as lodash from 'lodash';
 
 export const handler = async () => {
-  const max = 12;
+  const max = 20;
   const val = lodash.random(max);
   const response = {
     statusCode: 200,
