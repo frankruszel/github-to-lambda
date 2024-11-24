@@ -8,12 +8,26 @@ phases:
       - npm ci
   build:
     commands:
-      - echo "Compiling code into a single file..."
-      - npx ncc build index.js
-      - echo "Zipping handler code..."
-      - zip -j deploy.zip ./dist/*
-  post_build:
-    commands:
-      - echo "Updating Lambda Function..."
-      - aws lambda update-function-code --function-name github-to-lambda --zip-file fileb://deploy.zip
-      - echo "DONE!!"
+      - echo "Looking for all lambda functions..."
+      - |
+        cd lambdas
+        pwd
+        for function in */; do
+          echo ${function}
+          cd ${function}
+
+          if [[ -f "index.js" ]]; then
+            echo "Compiling code to single file for ${function} lambda function..."
+            npx ncc build index.js
+
+            echo "Zipping ${function} handler code..."
+            zip -j deploy.zip ./dist/*
+
+            echo "Deploying Lambda"
+            aws lambda update-function-code --function-name=${function} --zip-file=fileb://deploy.zip
+
+            echo "Deployed ${function}"
+          fi
+
+          cd ..
+        done
