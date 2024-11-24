@@ -16,7 +16,7 @@ phases:
           echo ${function}
           cd ${function}
 
-          if [[ -f "index.js" ]]; then
+          if [ -f "index.js" ]; then
             echo "Compiling code to single file for ${function} lambda function..."
             npx ncc build index.js
 
