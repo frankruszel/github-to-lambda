@@ -12,14 +12,11 @@ phases:
           aws lambda get-function --function-name $1 > /dev/null 2>&1
           if [ 0 -eq $? ]; then
             echo "Lambda '$1' exists"
-            return 0
           else
             echo "Lambda '$1' does not exist"
-            return 1
           fi
         }
       - test = (does_lambda_exist github-to-lambda)
-      - echo $test
   build:
     commands:
       - echo "Looking for all lambda functions..."
