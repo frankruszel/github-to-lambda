@@ -9,14 +9,14 @@ phases:
       - echo "setting up functions..."
       - | 
         does_lambda_exist() {
-          aws lambda get-function --function-name $1 > /dev/null 2>&1
+          aws lambda get-function --function-name "$1" > /dev/null 2>&1
           if [ 0 -eq $? ]; then
             echo "Lambda '$1' exists"
           else
             echo "Lambda '$1' does not exist"
           fi
         }
-      - test = (does_lambda_exist github-to-lambda)
+      - does_lambda_exist "github-to-lambda"
   build:
     commands:
       - echo "Looking for all lambda functions..."
