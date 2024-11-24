@@ -12,7 +12,7 @@ phases:
       - |
         cd lambdas
         pwd
-        for function in */; do
+        for function in */ ; do
           echo ${function}
           cd ${function}
 
