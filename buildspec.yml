@@ -42,7 +42,8 @@ phases:
 
               echo "Creating Lambda role"
               role_arn=$(aws iam create-role --role-name ${function%/}-default-role --assume-role-policy-document file://defaultRole.json --query 'Role.Arn' --output text)
-              aws iam attach-role-policy  --role-name ${role_arn} --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+              sleep 5
+              aws iam attach-role-policy  --role-name ${function%/}-default-role --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
               aws lambda create-function --function-name=${function%/} --role ${role_arn} --runtime nodejs22.x --handler index.handler --zip-file fileb://deploy.zip
             fi
           fi
