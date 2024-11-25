@@ -41,7 +41,7 @@ phases:
               zip -j deploy.zip ./dist/*
 
               echo "Creating Lambda"
-              aws lambda create-function --function-name=${function%/} --runtime "nodejs22.x" --handler index.handler --zip-file fileb://deploy.zip
+              aws lambda create-function --function-name=${function%/} --runtime nodejs22.x --handler index.handler --zip-file fileb://deploy.zip
             fi
           fi
 
