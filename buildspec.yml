@@ -41,9 +41,9 @@ phases:
               zip -j deploy.zip ./dist/*
 
               echo "Creating Lambda role"
-              aws iam create-role --role-name ${function%/}-default-role --assume-role-policy-document file://defaultRole.json
+              role_arn=$(aws iam create-role --role-name ${function%/}-default-role --assume-role-policy-document file://defaultRole.json --query 'Role.Arn' --output text)
               aws iam attach-role-policy  --role-name ${function%/}-default-role --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
-              aws lambda create-function --function-name=${function%/} --role ${function%/}-default-role --runtime nodejs22.x --handler index.handler --zip-file fileb://deploy.zip
+              aws lambda create-function --function-name=${function%/} --role ${role_arn} --runtime nodejs22.x --handler index.handler --zip-file fileb://deploy.zip
             fi
           fi
 
