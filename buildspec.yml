@@ -21,19 +21,27 @@ phases:
             status=$?
             echo $status
             if [ $status -eq 0 ]; then
-              echo "Lambda '$1' exists"
+              echo "Lambda '${function%/} ' exists"
               echo "Compiling code to single file for ${function%/} lambda function..."
               npx ncc build index.js
 
               echo "Zipping ${function%/} handler code..."
               zip -j deploy.zip ./dist/*
 
-              echo "Deploying Lambda"
+              echo "Updating Lambda"
               aws lambda update-function-code --function-name=${function%/} --zip-file=fileb://deploy.zip
 
               echo "Deployed ${function%/}"
             else
               echo "Lambda ${function%/} DOES NOT exist"
+              echo "Compiling code to single file for ${function%/} lambda function..."
+              npx ncc build index.js
+
+              echo "Zipping ${function%/} handler code..."
+              zip -j deploy.zip ./dist/*
+
+              echo "Creating Lambda"
+              aws lambda create-function --function-name=${function%/} --runtime "nodejs22.x" --handler index.handler --zip-file fileb://deploy.zip
             fi
           fi
 
