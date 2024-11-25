@@ -40,8 +40,25 @@ phases:
               echo "Zipping ${function%/} handler code..."
               zip -j deploy.zip ./dist/*
 
-              echo "Creating Lambda"
-              aws lambda create-function --function-name=${function%/} --runtime nodejs22.x --handler index.handler --zip-file fileb://deploy.zip
+              echo "Creating Lambda role"
+              aws iam create-role \
+              --role-name ${function%/}-default-role \
+              --assume-role-policy-document file://<(echo '{
+                "Version": "2012-10-17",
+                "Statement": [
+                  {
+                    "Effect": "Allow",
+                    "Principal": {
+                      "Service": "lambda.amazonaws.com"
+                    },
+                    "Action": "sts:AssumeRole"
+                  }
+                ]
+              }')
+              aws iam attach-role-policy \
+              --role-name ${function%/}-default-role \
+              --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+              aws lambda create-function --function-name=${function%/} --role ${function%/}-default-role --runtime nodejs22.x --handler index.handler --zip-file fileb://deploy.zip
             fi
           fi
 
