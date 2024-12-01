@@ -17,11 +17,12 @@ phases:
           cd ${function}
 
           if [ -f "index.js" ]; then
-            output=$(aws lambda get-function --function-name=${function%/} > /dev/null 2>&1)
-            echo $output
-            if [ $output -eq 0 ]; then
+            aws lambda get-function --function-name=${function%/} > /dev/null 2>&1
+            status=$?
+            echo $status
+            if [ $status -eq 0 ]; then
               echo "Lambda '${function%/} ' exists"
-              code_sha256=$(echo "$output" | jq -r '.CodeSha256')
+              code_sha256=$(echo "$status" | jq -r '.CodeSha256')
               echo "CodeSha256: $code_sha256"
               echo "Compiling code to single file for ${function%/} lambda function..."
               npx ncc build index.js
