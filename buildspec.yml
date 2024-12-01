@@ -25,6 +25,11 @@ phases:
               echo "Lambda '${function%/} ' exists"              
               echo $CODEBUILD_WEBHOOK_PREV_COMMIT
               echo $CODEBUILD_RESOLVED_SOURCE_VERSION
+              if [ "$(git diff --name-only $CODEBUILD_WEBHOOK_PREV_COMMIT $CODEBUILD_RESOLVED_SOURCE_VERSION | grep -e ${function%/})" != "" ]; then
+                echo 'works'
+              else
+                echo 'doesnt work'
+              fi
               testing=$(git diff --name-only $CODEBUILD_WEBHOOK_PREV_COMMIT $CODEBUILD_RESOLVED_SOURCE_VERSION)
               echo $testing
               echo "Compiling code to single file for ${function%/} lambda function..."
