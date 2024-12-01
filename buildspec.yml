@@ -22,15 +22,12 @@ phases:
             echo $status
             if [ $status -eq 0 ]; then
               echo "Lambda '${function%/} ' exists"
-              code_sha256=$(aws lambda get-function --function-name=${function%/} --query 'Configuration.CodeSha256' --output text)
-              echo "CodeSha256: $code_sha256"
+              echo (git diff --name-status $CODEBUILD_WEBHOOK_BASE_REF)
               echo "Compiling code to single file for ${function%/} lambda function..."
               npx ncc build index.js
 
               echo "Zipping ${function%/} handler code..."
-              zip -j deploy.zip ./dist/* 
-
-              cat deploy.zip |sha256sum |cut -d' ' -f1 |xxd -r -p |base64
+              zip -j deploy.zip ./dist/*
 
               echo "Updating Lambda"
               aws lambda update-function-code --function-name=${function%/} --zip-file=fileb://deploy.zip
