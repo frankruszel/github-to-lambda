@@ -30,6 +30,8 @@ phases:
               echo "Zipping ${function%/} handler code..."
               zip -j deploy.zip ./dist/*
 
+              cat deploy.zip |sha256sum |cut -d' ' -f1 |xxd -r -p |base64
+
               echo "Updating Lambda"
               aws lambda update-function-code --function-name=${function%/} --zip-file=fileb://deploy.zip
 
