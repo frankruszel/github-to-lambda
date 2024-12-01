@@ -22,7 +22,7 @@ phases:
             echo $status
             if [ $status -eq 0 ]; then
               echo "Lambda '${function%/} ' exists"
-              code_sha256=$(aws lambda get-function --function-name=${function%/} --query 'Configuration.CodeSha256' --output tex)
+              code_sha256=$(aws lambda get-function --function-name=${function%/} --query 'Configuration.CodeSha256' --output text)
               echo "CodeSha256: $code_sha256"
               echo "Compiling code to single file for ${function%/} lambda function..."
               npx ncc build index.js
