@@ -17,7 +17,7 @@ phases:
           cd ${function}
 
           if [ -f "index.js" ]; then
-            lambda_json = $(aws lambda get-function --function-name=${function%/})
+            lambda_json=$(aws lambda get-function --function-name=${function%/})
             echo $lambda_json
             status=$(${lambda_json} > /dev/null 2>&1 )
             echo $status
