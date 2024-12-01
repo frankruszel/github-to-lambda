@@ -19,7 +19,7 @@ phases:
           if [ -f "index.js" ]; then
             lambda_json = $(aws lambda get-function --function-name=${function%/})
             echo $lambda_json
-            status=$lambda_json > /dev/null 2>&1 
+            status=$(${lambda_json} > /dev/null 2>&1 )
             echo $status
             if [ $status -eq 0 ]; then
               echo "Lambda '${function%/} ' exists"
