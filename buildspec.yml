@@ -22,7 +22,7 @@ phases:
             echo $status
             if [ $status -eq 0 ]; then
               echo "Lambda '${function%/} ' exists"              
-              echo $CODEBUILD_WEBHOOK_BASE_REF
+              echo $CODEBUILD_SOURCE_REPO_URL
               echo "Compiling code to single file for ${function%/} lambda function..."
               npx ncc build index.js
 
