@@ -24,7 +24,7 @@ phases:
             if [ $status -eq 0 ]; then
               echo "Lambda '${function%/} ' exists"              
               echo $CODEBUILD_WEBHOOK_BASE_REF
-              testing=$(git diff)
+              testing=$(git diff --name-only $CODEBUILD_WEBHOOK_PREV_COMMIT $CODEBUILD_RESOLVED_SOURCE_VERSION )
               echo "Compiling code to single file for ${function%/} lambda function..."
               npx ncc build index.js
 
