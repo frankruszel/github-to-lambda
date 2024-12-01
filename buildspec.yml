@@ -27,7 +27,7 @@ phases:
               echo 'CODEBUILD_WEBHOOK_BASE_REF ${CODEBUILD_WEBHOOK_BASE_REF}'
               echo 'CODEBUILD_WEBHOOK_PREV_COMMIT ${CODEBUILD_WEBHOOK_PREV_COMMIT}'
               echo 'CODEBUILD_RESOLVED_SOURCE_VERSION ${CODEBUILD_RESOLVED_SOURCE_VERSION}'
-              if [ "$(git diff -$CODEBUILD_WEBHOOK_PREV_COMMIT $CODEBUILD_RESOLVED_SOURCE_VERSION | grep -e ${function%/})" != "" ]; then
+              if [ "$(git diff $CODEBUILD_WEBHOOK_PREV_COMMIT $CODEBUILD_RESOLVED_SOURCE_VERSION | grep -e ${function%/})" != "" ]; then
                 echo 'works'
               else
                 echo 'doesnt work'
