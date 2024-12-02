@@ -27,6 +27,7 @@ phases:
               echo $CODEBUILD_WEBHOOK_BASE_REF
               echo $CODEBUILD_WEBHOOK_PREV_COMMIT
               echo $CODEBUILD_RESOLVED_SOURCE_VERSION
+              git fetch --all
               if [ "$(git diff --name-only $CODEBUILD_RESOLVED_SOURCE_VERSION $CODEBUILD_WEBHOOK_PREV_COMMIT | grep -e ${function%/})" != "" ]; then
                 echo 'works' 
               else
