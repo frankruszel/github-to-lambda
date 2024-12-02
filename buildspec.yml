@@ -29,7 +29,7 @@ phases:
               echo $CODEBUILD_RESOLVED_SOURCE_VERSION
               git fetch --unshallow 
               git fetch origin      
-              if [ "$(git diff --name-only ce6f61193210069f93b2d2950b19242af4158616 1dab6e1d1327860376cfd33937dd2e876de93de5 | grep -e ${function%/})" != "" ]; then
+              if [ "$(git diff --name-only $CODEBUILD_RESOLVED_SOURCE_VERSION $CODEBUILD_WEBHOOK_PREV_COMMIT | grep -e ${function%/})" != "" ]; then
                 echo 'works' 
               else
                 echo 'doesnt work'
