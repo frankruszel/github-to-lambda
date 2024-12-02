@@ -5,7 +5,7 @@ export const handler = async () => {
   const val = lodash.random(max);
   const response = {
     statusCode: 200,
-    body: `06 new2: my random value (max: ${max}): ${val}`,
+    body: `06 new42: my random value (max: ${max}): ${val}`,
   };
   return response;
 };
